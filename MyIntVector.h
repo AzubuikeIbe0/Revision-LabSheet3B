@@ -15,7 +15,7 @@ public:
 	void push_back(int val);
 	int size();
 	int capacity();
-	int resize(int i);
+	void resize(int i);
 	int& at(int i);
 	const int& at(double i);
 	int& operator[](int i);

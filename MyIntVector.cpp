@@ -13,11 +13,15 @@ MyIntVector::MyIntVector()
 
 void MyIntVector::push_back(int val)
 {
-	if (m_size >= m_capacity)
+	if (m_size < m_capacity)
+	{
+		//resize(2 * m_capacity);
+		arrPtr[++m_size] = val;
+	}
+	else
 	{
 		resize(2 * m_capacity);
-		arrPtr[m_size] = val;
-		++m_size;
+		arrPtr[++m_size] = val;
 	}
 	
 }
@@ -32,75 +36,86 @@ int MyIntVector::capacity()
 	return m_capacity;
 }
 
-int MyIntVector::resize(int i)
+void MyIntVector::resize(int new_cap)
 {
-	if (m_size <= m_capacity) return m_capacity;
+	int* new_arr = arrPtr;
+	arrPtr = new int[new_cap];
 
-	int* new_arr = new int[m_size];
-
-	for (int i = 0; i < m_capacity; i++)
+	if (new_cap < m_capacity)
 	{
-		new_arr[i] = arrPtr[i];
+		// copy and cut off 
+
+		for (int i = 0; i < new_cap; i++)
+		{
+			arrPtr[i] = new_arr[i];
+		}
+
+	}
+	if (new_cap > m_capacity)
+	{
+		// copy and add zero
+		for (int i = 0; i < m_capacity; i++)
+		{
+			arrPtr[i] = new_arr[i];
+		}
+		for (int j = m_capacity; j < new_cap; j++)
+		{
+			arrPtr[j] = 0;
+
+		}
 	}
 
-	m_capacity = m_size;
-	
-	delete[] arrPtr;
+	m_capacity = new_cap;
+	delete[] new_arr;
+	new_arr = nullptr;
 
-	arrPtr = new_arr;
-
-	return m_capacity;
 }
 
 int& MyIntVector::at(int i)
 {
-	if (i > m_size)
+	if (i < 0 || i >= m_size)
 	{
 		std::cout << "Array out of bounds!" << endl;
 	}
 	else
 	{
-		std::cout << "Array at index " << i << " is " << arrPtr[i] << endl;
+		return i;
 	}
-
-	return arrPtr[i];
 }
 
 const int& MyIntVector::at(double i)
 {
-	if (i > m_size)
+	if (i < 0 || i >= m_size)
 	{
 		std::cout << "Array out of bounds!" << endl;
 	}
 	else
 	{
-		std::cout << "Array index " << i << " is " << endl;
+		return i;
 	}
 
-	return i;
+	
 }
 
 
 int& MyIntVector::operator[](int i)
 {
-	if (i < 0 || i >= m_size)
-	{
-		std::cout << "Range Error!" << endl;
-	}
-	return arrPtr[i];
+	
+	
+		return arrPtr[i];
+	
 }
 
 const int& MyIntVector::operator[](int i) const
 {
-	if (i < 0 || i >= m_size)
-	{
-		std::cout << "Range Error!" << endl;
-	}
-	return arrPtr[i];
+	
+		return arrPtr[i];
+
+	
 }
 
 MyIntVector::~MyIntVector()
 {
 	delete[] arrPtr;
-	arrPtr = NULL;
+	arrPtr = nullptr;
 }
